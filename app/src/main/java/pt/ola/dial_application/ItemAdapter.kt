@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class ItemAdapter(private val items: List<Item>) :
     RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
-
+    var onItemClickListener: ((Item) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
             ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -18,17 +18,19 @@ class ItemAdapter(private val items: List<Item>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-        holder.nameTextView.text = item.name
-        holder.phoneTextView.text = item.phoneNumber
-    }
+        holder.nameTextView.text = items[position].name
+        holder.phoneTextView.text = items[position].phoneNumber
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.invoke(items[position])
+        }}
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
-        val phoneTextView: TextView = itemView.findViewById(R.id.phoneTextView)
+        override fun getItemCount(): Int {
+            return items.size
+        }
+
+        class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            val nameTextView: TextView = itemView.findViewById(R.id.nameTextView)
+            val phoneTextView: TextView = itemView.findViewById(R.id.phoneTextView)
+        }
     }
-}
